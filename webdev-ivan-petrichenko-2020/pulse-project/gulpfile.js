@@ -4,6 +4,7 @@ const sass        = require('gulp-sass')(require('sass'));
 const cleanCSS = require('gulp-clean-css');
 const autoprefixer = require('gulp-autoprefixer').default;
 const rename = require("gulp-rename");
+const urlAdjuster = require('gulp-css-url-adjuster');
 
 gulp.task('server', function() {
 
@@ -19,6 +20,9 @@ gulp.task('server', function() {
 gulp.task('styles', function() {
     return gulp.src("src/sass/**/*.+(scss|sass)")
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(urlAdjuster({
+            replace: ['../../img', '../img']
+        }))
         .pipe(rename({suffix: '.min', prefix: ''}))
         .pipe(autoprefixer())
         .pipe(cleanCSS({compatibility: 'ie8'}))
